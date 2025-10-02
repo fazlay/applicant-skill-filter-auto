@@ -24,6 +24,11 @@
     'data': [
         'views/portal_template.xml'
     ],
+    'license': 'LGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+    
     
 
 }
