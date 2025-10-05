@@ -24,6 +24,7 @@
     'data': [
         'views/portal_template.xml'
     ],
+    'images': ['static/description/main_screenshot.jpg'],
     'license': 'LGPL-3',
     'installable': True,
     'application': False,
