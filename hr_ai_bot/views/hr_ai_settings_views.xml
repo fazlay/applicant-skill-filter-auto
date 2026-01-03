@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action -->
+    <record id="action_hr_ai_settings" model="ir.actions.act_window">
+        <field name="name">HR AI Settings</field>
+        <field name="res_model">hr.ai.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem id="menu_hr_ai_settings" name="Settings" parent="menu_hr_ai_root" action="action_hr_ai_settings" sequence="100"/>
+
+    <!-- Settings for HR AI Bot -->
+    <record id="view_hr_ai_settings_form" model="ir.ui.view">
+        <field name="name">hr.ai.settings.form</field>
+        <field name="model">hr.ai.settings</field>
+        <field name="arch" type="xml">
+            <form string="HR AI Configuration">
+                <sheet>
+                    <h2>Embedding Provider</h2>
+                    <group>
+                        <field name="embedding_provider"/>
+                        <field name="openai_api_key" password="True" invisible="embedding_provider != 'openai'"/>
+                        <field name="deepseek_api_key" password="True" invisible="embedding_provider != 'deepseek'"/>
+                        <field name="ollama_base_url" invisible="embedding_provider != 'ollama'"/>
+                        <field name="ollama_model" invisible="embedding_provider != 'ollama'"/>
+                    </group>
+
+                    <h2>LLM Configuration</h2>
+                    <group>
+                        <field name="openai_api_key_llm" password="True"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

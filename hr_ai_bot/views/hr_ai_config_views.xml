@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action -->
+    <record id="action_hr_ai_config" model="ir.actions.act_window">
+        <field name="name">AI Provider Config</field>
+        <field name="res_model">hr.ai.config</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem id="menu_hr_ai_config" name="Provider Config" parent="menu_hr_ai_root" action="action_hr_ai_config" sequence="100"/>
+
+    <!-- Config Form View -->
+    <record id="view_hr_ai_config_form" model="ir.ui.view">
+        <field name="name">hr.ai.config.form</field>
+        <field name="model">hr.ai.config</field>
+        <field name="arch" type="xml">
+            <form string="AI Provider Configuration">
+                <sheet>
+                    <h2>Select Embedding Provider</h2>
+                    <group>
+                        <field name="provider"/>
+                    </group>
+
+                    <h2>OpenAI Configuration</h2>
+                    <group invisible="provider != 'openai'">
+                        <field name="openai_api_key" password="True"/>
+                    </group>
+
+                    <h2>Ollama Configuration (Local, Free)</h2>
+                    <group invisible="provider != 'ollama'">
+                        <field name="ollama_base_url"/>
+                        <div class="alert alert-info">
+                            <p>To use Ollama:</p>
+                            <ol>
+                                <li>Install Ollama from https://ollama.ai</li>
+                                <li>Run: <code>ollama pull nomic-embed-text</code>
+                                </li>
+                                <li>Start Ollama: <code>ollama serve</code>
+                                </li>
+                                <li>Default URL is http://localhost:11434</li>
+                            </ol>
+                        </div>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_hr_ai_document" model="ir.actions.act_window">
+        <field name="name">AI Documents</field>
+        <field name="res_model">hr.ai.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>Upload PDFs to feed the HR AI assistant.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hr_ai_root" name="HR AI" sequence="10"/>
+
+    <menuitem id="menu_hr_ai_documents" name="Documents" parent="menu_hr_ai_root" action="action_hr_ai_document" sequence="20"/>
+
+    <record id="view_hr_ai_document_list" model="ir.ui.view">
+        <field name="name">hr.ai.document.list</field>
+        <field name="model">hr.ai.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_ai_document_form" model="ir.ui.view">
+        <field name="name">hr.ai.document.form</field>
+        <field name="model">hr.ai.document</field>
+        <field name="arch" type="xml">
+            <form string="AI Document">
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <group>
+                        <field name="name"/>
+                        <field name="file" filename="name" widget="binary"/>
+                    </group>
+                    <div class="oe_button_box">
+                        <button name="action_process_pdf" string="Process PDF" type="object" class="oe_stat_button" icon="fa-cogs"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
