@@ -19,6 +19,17 @@ def post_init_hook(env):
         WITH (lists = 100)
     """)
     
+    # Create bot partner
+    Partner = env['res.partner']
+    bot_partner = Partner.search([('name', '=', 'HR AI Assistant Bot')], limit=1)
+    if not bot_partner:
+        bot_partner = Partner.create({
+            'name': 'HR AI Assistant Bot',
+            'email': 'hr.ai.bot@company.com',
+            'active': True,
+            'is_company': False,
+        })
+    
     # On some stacks discuss may not be installed; guard to avoid install failure
     if 'discuss.channel' not in env:
         return

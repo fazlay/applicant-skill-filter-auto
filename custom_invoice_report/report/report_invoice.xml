@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_invoice_text" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-set='display_discount']" position="before">
+            <div class="mb-3">
+                <p>Thank you for your purchase</p>
+            </div>
+        </xpath>
+    </template>
+</odoo>

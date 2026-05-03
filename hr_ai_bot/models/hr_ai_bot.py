@@ -108,9 +108,18 @@ Question:
         context = self._search_context(question)
         answer = self._ask_llm(context, question)
 
-        # Post with context flag to prevent infinite loop
+        # Get bot partner
+        bot_partner = self.env['res.partner'].search([('name', '=', 'HR AI Assistant Bot')], limit=1)
+        if not bot_partner:
+            bot_partner = self.env['res.partner'].create({
+                'name': 'HR AI Assistant Bot',
+                'email': 'hr.ai.bot@company.com',
+            })
+        
+        # Post with context flag to prevent infinite loop and bot author
         channel.with_context(hr_ai_bot_replying=True).message_post(
             body=answer,
+            author_id=bot_partner.id,
             message_type='comment',
             subtype_xmlid='mail.mt_comment'
         )

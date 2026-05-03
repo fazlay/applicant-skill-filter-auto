@@ -1,0 +1,9 @@
+<!-- views/account_move_line_views.xml -->
+<odoo>
+    <data>
+        <!-- Note: Form view inheritance disabled due to parent view corruption/version issues
+        The custom calc field exists in the model and can be used programmatically.
+        This view can be re-enabled once the parent account.view_move_line_form is fixed.
+        -->
+    </data>
+</odoo>
