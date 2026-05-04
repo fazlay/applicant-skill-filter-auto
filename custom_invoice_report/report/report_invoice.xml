@@ -6,5 +6,15 @@
                 <p>Thank you for your purchase</p>
             </div>
         </xpath>
+
+        <!-- Replace total amount with custom total if enabled -->
+        <xpath expr="//span[@t-field='doc.amount_total']" position="replace">
+            <t t-if="doc.use_custom_total">
+                <span t-field="doc.custom_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+            </t>
+            <t t-else="">
+                <span t-field="doc.amount_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+            </t>
+        </xpath>
     </template>
 </odoo>

@@ -1,18 +1,26 @@
 <!-- views/account_move_views.xml -->
 <odoo>
     <data>
-        <!-- Add Recalculate button to invoice form -->
+        <!-- Add Custom Total fields just after the total amount section -->
         <record id="view_move_form_custom_calc" model="ir.ui.view">
             <field name="name">account.move.form.custom.calc</field>
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
+                <!-- Add button in the toolbar -->
                 <xpath expr="//button[@name='action_post']" position="after">
-                    <button name="action_recalculate_custom_lines"
-                            type="object"
-                            string="Recalculate Custom Lines"
-                            class="oe_highlight"
-                            invisible="not invoice_line_ids"/>
+                    <button name="action_recalculate_custom_lines" type="object" string="Recalculate" class="oe_highlight" invisible="not invoice_line_ids"/>
+                </xpath>
+
+                <!-- Add custom total formula field under the invoice lines -->
+                <xpath expr="//page[@name='other_info']" position="after">
+                    <page string="Custom Total" name="custom_total_tab">
+                        <group>
+                            <field name="use_custom_total" string="Enable Custom Total"/>
+                            <field name="custom_total_code" widget="ace" options="{'mode': 'python'}" placeholder="result = sum(l.price_subtotal for l in lines)"/>
+                            <field name="custom_total" readonly="1" string="Calculated Total"/>
+                        </group>
+                    </page>
                 </xpath>
             </field>
         </record>

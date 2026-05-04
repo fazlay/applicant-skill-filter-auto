@@ -235,3 +235,80 @@ result = 50.0 * line.quantity
 - Add `result = 0.0` at start as fallback
 - Check that `siblings` contains expected lines
 - Print values temporarily: `result = first_line.price_subtotal or 0.0`
+
+---
+
+## Custom Invoice Total (Global)
+
+In addition to per-line calculations, you can also define a custom total for the entire invoice. When enabled, this total will replace the default `amount_total` in the invoice report.
+
+### How to Enable
+
+1. Open an **Invoice**
+2. Go to the **Custom Total** tab (appears after checking "Use Custom Total")
+3. Check **"Use Custom Total Calculation"**
+4. Write your Python formula in **"Custom Total Formula"**
+5. The calculated total appears in **"Custom Total"** field
+
+### Available Variables for Custom Total
+
+| Variable | Description |
+|----------|-------------|
+| `move` | Current invoice (`account.move` record) |
+| `lines` | All invoice lines (`account.move.line` recordset) |
+| `result` | **SET THIS** to the calculated total amount (float) |
+
+### Example Formulas
+
+**1. Simple sum of all lines:**
+```python
+result = sum(l.price_subtotal for l in lines)
+```
+
+**2. Sum only custom calculation lines:**
+```python
+custom_lines = lines.filtered(lambda l: l.use_custom_calc)
+result = sum(l.price_subtotal for l in custom_lines)
+```
+
+**3. Convert USD to BDT:**
+```python
+usd_lines = lines.filtered(lambda l: l.currency_id.name == 'USD')
+usd_total = sum(l.price_subtotal for l in usd_lines)
+rate = move.bdt_rate or 1.0
+result = usd_total * rate
+```
+
+**4. Sum of specific category:**
+```python
+service_lines = lines.filtered(lambda l: l.product_id.categ_id.name == 'Services')
+result = sum(l.price_subtotal for l in service_lines)
+```
+
+**5. Custom formula with conditions:**
+```python
+total = 0.0
+for l in lines:
+    if l.sequence < 5:
+        total += l.price_subtotal
+    else:
+        total += l.price_subtotal * 1.1  # Add 10% extra
+result = total
+```
+
+### Important Notes
+
+1. **Fallback**: If custom total is enabled but formula fails, it falls back to `amount_untaxed`
+2. **Report display**: The invoice report shows `custom_total` instead of `amount_total` when enabled
+3. **Tax handling**: Taxes are calculated separately by Odoo's standard mechanism
+4. **Recalculate**: Click the "Recalculate" button or save the invoice to recalculate
+
+---
+
+## Quick Reference - Full Module
+
+| Feature | Where to Configure |
+|---------|-------------------|
+| Line-level calculation | Product → Custom Calculation tab |
+| Invoice-level total | Invoice → Custom Total tab |
+| Recalculate button | Invoice form (top right area) |

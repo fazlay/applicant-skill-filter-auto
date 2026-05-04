@@ -9,6 +9,7 @@
         'views/product_template_views.xml',
         'views/account_move_line_views.xml',
         'views/account_move_views.xml',
+        'views/accout_move_line.xml'
     ],
     'installable': True,
     'auto_install': False,
