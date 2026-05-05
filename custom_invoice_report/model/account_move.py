@@ -5,6 +5,12 @@ from odoo.tools.safe_eval import safe_eval
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    total_type_id = fields.Many2one(
+        'invoice.total.type',
+        string='Total Total Type',
+        help="Select a calculation method for invoice total"
+    )
+
     use_custom_total = fields.Boolean(
         string="Use Custom Total Calculation",
         help="Enable to write custom Python logic for invoice total"
@@ -57,3 +63,14 @@ result = sum(l.price_subtotal for l in lines)
             self.invoice_line_ids._compute_totals()
         self._compute_custom_total()
         return True
+
+    @api.onchange('total_type_id')
+    def _onchange_total_type_id(self):
+        """Auto-fill custom total when total type is selected."""
+        if self.total_type_id:
+            self.use_custom_total = True
+            self.custom_total_code = self.total_type_id.total_code
+            # Trigger recompute
+            if self.invoice_line_ids:
+                self.invoice_line_ids._compute_totals()
+                self._compute_custom_total()
