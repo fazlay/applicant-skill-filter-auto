@@ -9,6 +9,10 @@ class ProductTemplate(models.Model):
         string="Use Custom Calculation",
         help="Enable to write custom Python logic for invoice line total calculation"
     )
+    display_currency_id = fields.Many2one(
+        'res.currency', 
+        string='Display Currency'
+    )
 
     custom_calc_code = fields.Text(
         string="Custom Calculation Code",

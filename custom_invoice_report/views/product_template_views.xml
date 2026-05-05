@@ -9,11 +9,10 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Custom Calculation" name="custom_calc_settings">
                     <group>
+                        <field name="display_currency_id"/>
                         <field name="use_custom_calc"/>
-                        <field name="custom_calc_code"
-                               widget="ace"
-                               options="{'mode': 'python'}"
-                               invisible="not use_custom_calc"/>
+                        display_currency_id
+                        <field name="custom_calc_code" widget="ace" options="{'mode': 'python'}" invisible="not use_custom_calc"/>
                     </group>
                 </page>
             </xpath>
