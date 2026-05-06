@@ -37,24 +37,30 @@ result = sum(l.price_subtotal for l in lines)
         readonly=False,
     )
 
-    @api.depends('invoice_line_ids.price_subtotal', 'use_custom_total', 'custom_total_code')
+    @api.depends('invoice_line_ids.price_subtotal', 'use_custom_total', 'custom_total_code', 'total_type_id')
     def _compute_custom_total(self):
         for move in self:
-            if not move.use_custom_total or not move.custom_total_code:
-                move.custom_total = move.amount_untaxed
-                continue
+            # Only recompute if using a custom formula (code or total_type)
+            if move.use_custom_total and (move.custom_total_code or move.total_type_id):
+                localdict = {
+                    'move': move,
+                    'lines': move.invoice_line_ids,
+                    'result': 0.0,
+                }
 
-            localdict = {
-                'move': move,
-                'lines': move.invoice_line_ids,
-                'result': 0.0,
-            }
-
-            try:
-                safe_eval(move.custom_total_code, localdict, mode='exec', nocopy=True)
-                move.custom_total = localdict.get('result', move.amount_untaxed)
-            except Exception as e:
-                move.custom_total = move.amount_untaxed
+                try:
+                    code = move.custom_total_code or (move.total_type_id.total_code if move.total_type_id else '')
+                    if code:
+                        safe_eval(code, localdict, mode='exec', nocopy=True)
+                        move.custom_total = localdict.get('result', move.amount_untaxed)
+                    else:
+                        move.custom_total = move.amount_untaxed
+                except Exception as e:
+                    move.custom_total = move.amount_untaxed
+            else:
+                # If no custom formula, don't override manual entry
+                if not move.custom_total:
+                    move.custom_total = move.amount_untaxed
 
     def action_recalculate_custom_lines(self):
         """Recalculate all custom calculation lines in this invoice."""
