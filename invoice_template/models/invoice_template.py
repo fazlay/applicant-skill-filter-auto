@@ -38,42 +38,53 @@ class AccountMove(models.Model):
         help='Select a template to pre-fill invoice lines'
     )
 
+    def _prepare_invoice_line_values(self, template_line):
+        """Prepare values for creating an invoice line from a template line"""
+        return template_line._prepare_invoice_line_values()
+    def _sanitize_vals(self, vals):
+        if vals.get('invoice_line_ids') and vals.get('line_ids'):
+            inv_virtuals = {
+                cmd[1] for cmd in vals['invoice_line_ids'] if cmd[0] == 0
+            }
+            line_virtuals = {
+                cmd[1] for cmd in vals['line_ids'] if cmd[0] == 0
+            }
+            if inv_virtuals and line_virtuals and not (inv_virtuals & line_virtuals):
+                del vals['line_ids']
+        return super()._sanitize_vals(vals)
     @api.onchange('template_id')
     def _onchange_template_id(self):
-        """Apply template to invoice when selected."""
         if not self.template_id:
-            return {'value': {}}
+            return
 
         template = self.template_id
+        new_lines = []
 
-        # Get max sequence for new lines
-        max_seq = max(self.invoice_line_ids.mapped('sequence'), default=0)
+        for tl in template.line_ids.sorted('sequence'):
+            if not tl.product_id:
+                continue
 
-        # Build list of line values using Command.create format
-        commands = []
-        for template_line in template.line_ids.sorted('sequence'):
-            max_seq += 10
-            commands.append(Command.create({
-                'product_id': template_line.product_id.id,
-                'name': template_line.name or template_line.product_id.name,
-                'quantity': template_line.quantity,
-                'price_unit': template_line.price_unit or template_line.product_id.list_price,
-                'sequence': max_seq,
+            product = tl.product_id.with_company(self.company_id)
+     
+
+            new_lines.append(Command.create({
+                'product_id': product.id,
+                'name': tl.name or product.display_name,
+                'quantity': tl.quantity,
+                'price_unit': (
+                    tl.price_unit if tl.price_unit != 0.0
+                    else product.lst_price
+                ),
+                'sequence': tl.sequence,
+     
             }))
 
-        # Assign lines using commands
-        if commands:
-            self.invoice_line_ids = commands
+        self.invoice_line_ids = [Command.clear()] + new_lines
 
-        # Apply total type if template has one
+        # self.template_id = template
+
         if template.total_type_id:
-            self.total_type_id = template.total_type_id.id
-
-        # Apply journal if template has one
+            self.total_type_id = template.total_type_id
         if template.journal_id:
-            self.journal_id = template.journal_id.id
-
-        # Clear template selection after applying
-        self.template_id = False
-
-        return {'value': {}}
+            self.journal_id = template.journal_id
+            
