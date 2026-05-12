@@ -62,6 +62,8 @@ class AccountMoveLine(models.Model):
                     safe_eval(custom_code, localdict, mode='exec', nocopy=True)
                     line.price_subtotal = localdict.get('result', 0.0)
                     line.price_total = localdict.get('result', 0.0)
+                    if 'set_price_unit' in localdict:
+                        line.price_unit = localdict['set_price_unit']
                 except Exception as e:
                     raise ValueError(
                         f"Error in custom calculation for {line.product_id.name}: {e}"
