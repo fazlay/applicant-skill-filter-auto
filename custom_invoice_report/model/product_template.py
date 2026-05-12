@@ -13,6 +13,8 @@ class ProductTemplate(models.Model):
         'res.currency', 
         string='Display Currency'
     )
+    type_code = fields.Text(
+        string="Type Code")
 
     custom_calc_code = fields.Text(
         string="Custom Calculation Code",
