@@ -80,7 +80,12 @@
             <field name="arch" type="xml">
                 <!-- Add template field in header area (after partner) -->
                 <xpath expr="//field[@name='partner_id']" position="after">
+
                     <field name="template_id" placeholder="Select Template" invisible="state != 'draft'" context="{'default_total_type_id': total_type_id}"/>
+                    <group>
+                        <field name="unit_price_column" string="Show Unit Price Column"/>
+                        <field name="quantity_column" string="Show Quantity Column"/>
+                    </group>
                 </xpath>
 
                 <!-- Add Recalculate button -->

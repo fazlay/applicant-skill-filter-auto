@@ -87,4 +87,5 @@ class AccountMove(models.Model):
             self.total_type_id = template.total_type_id
         if template.journal_id:
             self.journal_id = template.journal_id
-            
+    unit_price_column = fields.Boolean(string="Unit Price", default=True)
+    quantity_column = fields.Boolean(string="Quantity", default=True)
