@@ -8,6 +8,7 @@
         'data/charge_product.xml',
         'data/total_types.xml',
         'report/report_invoice.xml',
+        'report/report_invoice_table.xml',
         'views/product_template_views.xml',
         'views/account_move_line_views.xml',
         'views/account_move_views.xml',

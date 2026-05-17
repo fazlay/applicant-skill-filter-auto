@@ -15,6 +15,15 @@ class ProductTemplate(models.Model):
     )
     type_code = fields.Text(
         string="Type Code")
+    line_type = fields.Selection(
+        [
+            ('main_invoice_only', 'Invoice'),
+            ('breakdown', 'Items Breakdown'),
+            ('both', 'Both'),
+        ],
+        string="Line Type",
+        default='main_invoice_only'
+    )
 
     custom_calc_code = fields.Text(
         string="Custom Calculation Code",
@@ -33,3 +42,5 @@ total = sum(l.price_subtotal for l in siblings if l.sequence < line.sequence)
 result = total * 0.05
 """
     )
+    
+    

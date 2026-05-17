@@ -79,3 +79,26 @@ class AccountMoveLine(models.Model):
             custom_lines = self.move_id.invoice_line_ids.filtered('use_custom_calc')
             if custom_lines:
                 custom_lines._compute_totals()
+                
+    display_subtotal_from_line = fields.Many2one(
+        'account.move.line',
+        string="Show Subtotal From Line",
+        domain="[('move_id', '=', move_id)]"
+    )
+
+
+
+    line_type = fields.Selection(
+        [('main_invoice_only', 'Invoice'), ('breakdown', 'Items Breakdown'), ('both', 'Both')],
+        string="Line Type",
+        compute="_compute_line_type",
+        store=False
+    )
+
+    @api.depends('product_id', 'product_id.product_tmpl_id.line_type', 'display_type')
+    def _compute_line_type(self):
+        for line in self:
+            if line.display_type in ('line_section', 'line_note') or not line.product_id:
+                line.line_type = False
+            else:
+                line.line_type = line.product_id.product_tmpl_id.line_type

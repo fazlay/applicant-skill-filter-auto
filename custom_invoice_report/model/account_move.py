@@ -15,6 +15,10 @@ class AccountMove(models.Model):
         string="Use Custom Total Calculation",
         help="Enable to write custom Python logic for invoice total"
     )
+    print_breakdown = fields.Boolean(
+        string="Print Items Breakdown",
+        default=False
+    )
 
     custom_total_code = fields.Text(
         string="Custom Total Formula",

@@ -29,6 +29,76 @@ This module allows you to write custom Python code in product templates to calcu
 
 ---
 
+## Using type_code for Product Grouping
+
+### What is type_code?
+A field on products that allows grouping multiple products together for calculations. Unlike barcode which should be unique, multiple products can share the same type_code.
+
+### Where to Set
+- Product Form → Custom Calculation Tab → Type Code field
+
+### Available in Formula as
+- `line.product_id.type_code`
+- `product.type_code`
+
+### Examples
+
+#### Example 1: Sum All Lines with Specific type_code
+```python
+# Sum all GCP type products
+gcp_lines = siblings.filtered(lambda l: l.product_id.type_code == 'GCP')
+result = sum(l.price_subtotal or 0.0 for l in gcp_lines)
+```
+
+#### Example 2: Multiple type_codes
+```python
+# Include multiple type_codes
+included_types = ['GCP', 'AMC', 'SERVICE']
+filtered = siblings.filtered(lambda l: l.product_id.type_code in included_types)
+result = sum(l.price_subtotal or 0.0 for l in filtered)
+```
+
+#### Example 3: Priority Lookup with type_code (First Found)
+```python
+# Find first line with priority type_code
+type_priority = ['BILL_BDT', 'PRODUCT']
+ref_line = None
+for code in type_priority:
+    found = siblings.filtered(lambda l: l.product_id.type_code == code)
+    if found:
+        ref_line = found[0]
+        break
+
+if ref_line:
+    result = ref_line.price_subtotal * 0.05
+else:
+    result = 0.0
+```
+
+#### Example 4: Sum Multiple type_codes and Apply Formula
+```python
+# Complex: (CONSUMPTION - PAID - CREDIT) + MASTER
+consumption = sum(l.price_subtotal or 0.0 for l in siblings.filtered(lambda x: x.product_id.type_code == 'CONSUMPTION'))
+paid = sum(l.price_subtotal or 0.0 for l in siblings.filtered(lambda x: x.product_id.type_code == 'PAID'))
+credit = sum(l.price_subtotal or 0.0 for l in siblings.filtered(lambda x: x.product_id.type_code == 'CREDIT'))
+master = sum(l.price_subtotal or 0.0 for l in siblings.filtered(lambda x: x.product_id.type_code == 'MASTER'))
+
+result = (consumption - paid - credit) + master
+```
+
+#### Example 5: Filter and Apply Percentage
+```python
+# Find all PRODUCT type lines, sum them, apply percentage
+product_lines = siblings.filtered(lambda l: l.product_id.type_code == 'PRODUCT')
+total_amount = sum(l.price_subtotal or 0.0 for l in product_lines)
+
+discount_pct = line.percent or 0.0
+result = total_amount * (discount_pct / 100)
+set_price_unit = result
+```
+
+---
+
 ## Common Patterns
 
 ### 1. First Line as Base (Both Tax & VAT from Line 1)
@@ -217,6 +287,8 @@ result = 50.0 * line.quantity
 3. **Works automatically** - Recalculates when any sibling line changes
 4. **Manual recalculate** - Use "Recalculate Custom Lines" button on invoice form
 5. **Errors** - If code has errors, you'll see a clear error message with product name
+6. **Setting price_unit** - Use `set_price_unit = result` instead of `line.price_unit = result` (the latter is forbidden in safe_eval)
+7. **type_code grouping** - Use `l.product_id.type_code` to filter products by type for group calculations
 
 ---
 
