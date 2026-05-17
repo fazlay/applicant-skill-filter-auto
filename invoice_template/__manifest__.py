@@ -6,7 +6,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/invoice_template_views.xml',
-        # 'views/report_invoice_custom_conditional.xml',
+        'views/report_invoice_custom_conditional.xml',
     ],
     'license': 'LGPL-3',
     'installable': True,

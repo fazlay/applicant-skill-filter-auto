@@ -16,7 +16,7 @@
             </th>
         </xpath>
 
-        <!-- <xpath expr="//td[@name='td_quantity']" position="replace">
+        <xpath expr="//td[@name='td_quantity']" position="replace">
             <td name="td_quantity" t-if="o.quantity_column" class="text-end text-nowrap">
                 <span t-field="line.quantity">3.00</span>
             </td>
@@ -26,7 +26,7 @@
             <td name="td_price_unit" t-if="o.unit_price_column" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                 <span class="text-nowrap" t-field="line.price_unit">9.00</span>
             </td>
-        </xpath> -->
+        </xpath>
 
     </template>
 </odoo>

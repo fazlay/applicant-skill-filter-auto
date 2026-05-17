@@ -25,7 +25,7 @@
             </td>
         </xpath>
     </template> -->
-    <template id="invoice_custom_tax_totals" inherit_id="account.document_tax_totals_template">
+    <template id="invoice_upstra_custom_tax_totals" inherit_id="account.document_tax_totals_template">
         <xpath expr="//t[contains(@t-foreach, 'tax_groups')]" position="replace"></xpath>
         <xpath expr="//tr[hasclass('o_total')]" position="replace">
             <tr class="o_total">
