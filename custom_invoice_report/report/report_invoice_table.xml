@@ -27,10 +27,10 @@
                                 <th class="text-end">
                                     <span>Description</span>
                                 </th>
-                                <th class="text-end">
+                                <th t-if="o.quantity_column" class="text-end">
                                     <span>Quantity</span>
                                 </th>
-                                <th class="text-end">
+                                <th t-if="o.unit_price_column" class="text-end">
                                     <span>Unit Price</span>
                                 </th>
                                 <th class="text-end">
@@ -50,10 +50,10 @@
                                     <td class="text-end">
                                         <span t-field="line.quantity"/>
                                     </td>
-                                    <td class="text-end">
+                                    <td t-if="o.unit_price_column" class="text-end">
                                         <span t-field="line.price_unit"/>
                                     </td>
-                                    <td class="text-end">
+                                    <td t-if="o.quantity_column" class="text-end">
                                         <span t-field="line.price_subtotal" t-options="{
                       'widget': 'monetary',
                       'display_currency': line.product_id.display_currency_id or o.currency_id
@@ -71,9 +71,9 @@
                                         <t t-set="bdt_currency" t-value="env['res.currency'].search([('name', '=', 'BDT')], limit=1)"/>
                                         <strong t-out="o.custom_total" t-options='{"widget": "monetary", "display_currency": bdt_currency}'/>
                                     </t>
-                                    <t t-else="">
+                                    <!-- <t t-else="">
                                         <strong t-out="tax_totals['total_amount_currency']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-                                    </t>
+                                    </t> -->
                                 </td>
                             </tr>
                         </tfoot>

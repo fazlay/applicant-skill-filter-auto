@@ -19,6 +19,7 @@ class ProductTemplate(models.Model):
         [
             ('main_invoice_only', 'Invoice'),
             ('breakdown', 'Items Breakdown'),
+            ('conditional', 'Conditional'),
             ('both', 'Both'),
         ],
         string="Line Type",

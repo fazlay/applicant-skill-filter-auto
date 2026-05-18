@@ -95,10 +95,21 @@ class AccountMoveLine(models.Model):
         store=False
     )
 
-    @api.depends('product_id', 'product_id.product_tmpl_id.line_type', 'display_type')
+    @api.depends(
+    'product_id',
+    'product_id.product_tmpl_id.line_type',
+    'display_type',
+    'move_id.print_breakdown',  # ← add this dependency
+    )
     def _compute_line_type(self):
         for line in self:
             if line.display_type in ('line_section', 'line_note') or not line.product_id:
                 line.line_type = False
             else:
-                line.line_type = line.product_id.product_tmpl_id.line_type
+                tmpl_line_type = line.product_id.product_tmpl_id.line_type
+
+                if tmpl_line_type == 'conditional':
+                    # Resolve based on parent move's print_breakdown flag
+                    line.line_type = 'breakdown' if line.move_id.print_breakdown else 'main_invoice_only'
+                else:
+                    line.line_type = tmpl_line_type
