@@ -19,6 +19,11 @@ class AccountMove(models.Model):
         string="Print Items Breakdown",
         default=False
     )
+    split_table_by_section = fields.Boolean(
+        string="Split Table by Section",
+        default=False,
+        help="If true, the main invoice table will be split into multiple tables based on section lines."
+    )
 
     custom_total_code = fields.Text(
         string="Custom Total Formula",

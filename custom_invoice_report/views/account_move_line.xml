@@ -12,9 +12,6 @@
                     <field name="custom_total" readonly="1"/>
                 </group>
             </xpath>
-
-
-
         </field>
     </record>
 

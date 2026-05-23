@@ -18,6 +18,8 @@
                 <xpath expr="//field[@name='invoice_date_due']" position="after">
                     <label for="print_breakdown" string="Print Breakdown"/>
                     <field name="print_breakdown" widget="boolean_toggle"/>
+                    <label for="split_table_by_section" string="Split Table by Section"/>
+                    <field name="split_table_by_section" widget="boolean_toggle"/>
                 </xpath>
 
                 <!-- Add Recalculate button -->
