@@ -24,6 +24,16 @@ class AccountMove(models.Model):
         default=False,
         help="If true, the main invoice table will be split into multiple tables based on section lines."
     )
+    show_bin = fields.Boolean(
+        string="Show BIN",
+        default=False,
+        help="If enabled, the BIN number will be displayed on the invoice report."
+    )
+    show_exchange_rate = fields.Boolean(
+        string="Show Exchange Rate",
+        default=False,
+        help="If enabled, the exchange rate will be displayed on the invoice report."
+    )
 
     custom_total_code = fields.Text(
         string="Custom Total Formula",

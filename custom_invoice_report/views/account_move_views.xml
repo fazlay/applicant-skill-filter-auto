@@ -20,6 +20,10 @@
                     <field name="print_breakdown" widget="boolean_toggle"/>
                     <label for="split_table_by_section" string="Split Table by Section"/>
                     <field name="split_table_by_section" widget="boolean_toggle"/>
+                    <label for="show_bin" string="Show BIN"/>
+                    <field name="show_bin" widget="boolean_toggle"/>
+                    <label for="show_exchange_rate" string="Show Exchange Rate"/>
+                    <field name="show_exchange_rate" widget="boolean_toggle"/>
                 </xpath>
 
                 <!-- Add Recalculate button -->
