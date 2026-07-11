@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_ai_document,hr.ai.document,model_hr_ai_document,,1,1,1,0
-access_hr_ai_config,hr.ai.config,model_hr_ai_config,,1,1,1,0
+access_hr_ai_document,hr.ai.document,model_hr_ai_document,base.group_user,1,1,1,0
+access_hr_ai_config,hr.ai.config,model_hr_ai_config,hr.group_hr_manager,1,1,1,0

@@ -1,9 +1,12 @@
 {
-    'name': 'HR AI Bot (POC)',
-    'version': '1.0',
+    'name': 'HR AI Bot',
+    'version': '1.1',
     'category': 'HR',
     'summary': 'AI HR assistant using Discuss + RAG',
-    'depends': ['mail', 'mail', 'documents'],
+    'depends': ['mail', 'documents'],
+    'external_dependencies': {
+        'python': ['litellm'],
+    },
     'data': [
         'security/ir.model.access.csv',
         'views/hr_ai_config_views.xml',
